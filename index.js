@@ -78,6 +78,13 @@ app.get("/create-message", ensureLoggedIn, (req, res) => {
   res.render("create-message", { user: req.user });
 });
 
+app.get("/get-the-code", (req, res) => {
+  res.render("get-the-code", {
+    user: req.user,
+    memberCode: process.env.MEMBER_CODE,
+  });
+});
+
 app.get("/dashboard", ensureLoggedIn, (req, res) => {
   res.redirect("/messages");
 });
@@ -124,6 +131,6 @@ app.listen(PORT, () => {
           }
         })
         .catch((err) => console.error("Error during self-ping:", err));
-    }, 13 * 60 * 1000); // 13 minutes
+    }, 1 * 60 * 1000); // 13 minutes
   }
 });

@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl mx-auto text-center space-y-8">
+
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">The Gatekeeper's Riddle</h1>
+      <p class="text-lg text-gray-600">
+        Answer the riddle to prove your worth and receive the secret code.
+      </p>
+    </div>
+
+    <!-- Riddle Container -->
+    <div id="riddle-container" class="bg-white shadow-md rounded-lg p-6">
+      <p class="text-lg font-semibold text-gray-800 mb-4" id="riddle-text">
+        Who is the best junior in Webwiz?( give answer in all small )
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
+        <input
+          type="text"
+          id="answer-input"
+          placeholder="Your answer..."
+          class="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          id="submit-answer"
+          class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow hover:bg-indigo-700 transition"
+        >
+          Submit
+        </button>
+      </div>
+      <div id="feedback" class="mt-4 text-sm"></div>
+    </div>
+
+    <!-- Success Container -->
+    <div
+      id="success-container"
+      class="bg-white shadow-md rounded-lg p-6 text-center hidden"
+    >
+      <h2 class="text-2xl font-semibold text-green-600 mb-2">You have solved the riddle!</h2>
+      <p class="text-gray-700">The secret code to become a member is:</p>
+      <p class="text-2xl font-mono bg-gray-100 px-6 py-3 rounded my-4 inline-block">
+        <%= memberCode %>
+      </p>
+      <a
+        href="/become-member"
+        class="inline-block mt-3 px-5 py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700 transition"
+      >
+        Use the Code
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const submitButton = document.getElementById("submit-answer");
+    const answerInput = document.getElementById("answer-input");
+    const feedbackDiv = document.getElementById("feedback");
+    const riddleContainer = document.getElementById("riddle-container");
+    const successContainer = document.getElementById("success-container");
+
+    const correctAnswer = "anupam";
+
+    submitButton.addEventListener("click", () => {
+      const userAnswer = answerInput.value.trim().toLowerCase();
+
+      if (userAnswer === correctAnswer) {
+        feedbackDiv.innerHTML = "";
+        riddleContainer.classList.add("hidden");
+        successContainer.classList.remove("hidden");
+      } else {
+        feedbackDiv.innerHTML =
+          '<p class="text-red-600">That is not correct. Ponder the question and try again.</p>';
+        answerInput.value = "";
+        answerInput.focus();
+      }
+    });
+
+    answerInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        submitButton.click();
+      }
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>

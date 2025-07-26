@@ -1,50 +1,93 @@
 <%- include('partials/header', { title: 'Become a Member' }) %>
 
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="w-full max-w-md space-y-8">
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl mx-auto space-y-8">
+
     <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8">
       <div class="text-center mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Become a Full Member</h2>
-        <p class="mt-2 text-sm text-gray-500">
-          Unlock full access by entering the secret passcode.
-        </p>
+        <p class="text-sm text-gray-500">Unlock full access by entering the secret passcode.</p>
       </div>
 
       <% if (user.is_member) { %>
-      <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-5 rounded-lg text-center">
-        <h4 class="text-lg font-semibold flex items-center justify-center gap-2">
-          <i class="fas fa-check-circle text-green-600"></i>You Are Already a Member!
+      <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-5 rounded-lg text-center">
+        <h4 class="text-lg font-semibold flex items-center justify-center gap-2 mb-2">
+          <i class="fas fa-check-circle text-green-600"></i> You Are Already a Member!
         </h4>
-        <p class="mt-2">You have full access to all community features.</p>
-        <hr class="my-4 border-green-300" />
-        <a href="/dashboard" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition">
-          <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
+        <p>You have full access to all community features.</p>
+        <hr class="my-4 border-green-200" />
+        <a href="/dashboard" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
+          <i class="fas fa-tachometer-alt"></i> Go to Dashboard
         </a>
       </div>
       <% } else { %>
+
+      <!-- Passcode Form -->
       <form action="/become-member" method="post" class="space-y-6">
         <div>
           <label for="secret_code" class="block text-sm font-medium text-gray-700">Secret Passcode</label>
           <input
             type="password"
-            name="secret_code"
             id="secret_code"
-            required
+            name="secret_code"
             placeholder="Secret Passcode"
+            required
             class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div>
-          <button
-            type="submit"
-            class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition"
-          >
-            <i class="fas fa-lock-open"></i>Unlock Membership
+          <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition">
+            <i class="fas fa-lock-open"></i> Unlock Membership
           </button>
         </div>
       </form>
+
+      <!-- Optional Second Card -->
+      <div class="mt-10">
+        <div class="bg-white shadow-lg rounded-lg p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-center text-gray-800 mb-6">Become a Member</h2>
+
+          <% if (locals.error) { %>
+          <div class="bg-red-100 text-red-700 border border-red-300 rounded p-4 mb-4">
+            <%= error %>
+          </div>
+          <% } %>
+
+          <% if (locals.successMessage) { %>
+          <div class="bg-green-100 text-green-700 border border-green-300 rounded p-4 mb-4">
+            <%= successMessage %>
+          </div>
+          <% } %>
+
+          <form action="/become-member" method="POST" class="space-y-6">
+            <div>
+              <label for="secret_code" class="block text-sm font-medium text-gray-700">Enter Secret Passcode</label>
+              <input
+                type="text"
+                id="secret_code"
+                name="secret_code"
+                required
+                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
+              Join the Inner Circle
+            </button>
+          </form>
+
+          <hr class="my-6" />
+          <div class="text-center">
+            <p class="text-sm text-gray-500">Don't have the code?</p>
+            <a href="/get-the-code" class="mt-2 inline-block px-4 py-2 border border-gray-400 text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition">
+              Solve the Riddle
+            </a>
+          </div>
+        </div>
+      </div>
+
       <% } %>
     </div>
+
   </div>
 </div>
 
