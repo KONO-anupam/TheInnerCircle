@@ -33,8 +33,21 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+function ensureLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/login");
+}
+
+
 // Routes
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
+
+app.get("/become-member", ensureLoggedIn, (req, res) => {
+  res.render("become-member", { user: req.user });
+});
 
 app.get("/", (req, res) => {
   res.render("index");
