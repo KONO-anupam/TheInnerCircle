@@ -1,53 +1,128 @@
 <%- include('partials/header') %>
 
-<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-2xl mx-auto text-center space-y-8">
-
-    <div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">The Gatekeeper's Riddle</h1>
-      <p class="text-lg text-gray-600">
-        Answer the riddle to prove your worth and receive the secret code.
+<div class="flex-grow bg-gradient-to-br from-purple-50 to-indigo-50 py-12">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mb-6 animate-pulse">
+        <i class="fas fa-puzzle-piece text-white text-3xl"></i>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        The Gatekeeper's Riddle
+      </h1>
+      <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
+        Answer the riddle to prove your worth and receive the secret code to unlock membership
       </p>
     </div>
 
     <!-- Riddle Container -->
-    <div id="riddle-container" class="bg-white shadow-md rounded-lg p-6">
-      <p class="text-lg font-semibold text-gray-800 mb-4" id="riddle-text">
-        Who is the best junior in Webwiz?( give answer in all small )
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3 mt-4">
-        <input
-          type="text"
-          id="answer-input"
-          placeholder="Your answer..."
-          class="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
-        <button
-          id="submit-answer"
-          class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md shadow hover:bg-indigo-700 transition"
-        >
-          Submit
-        </button>
+    <div id="riddle-container" class="bg-white shadow-2xl rounded-2xl p-8 md:p-10 mb-8 border border-gray-100">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full mb-4">
+          <i class="fas fa-question text-white text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Solve This Riddle</h2>
       </div>
-      <div id="feedback" class="mt-4 text-sm"></div>
+
+      <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-8 border border-indigo-100">
+        <p class="text-xl font-semibold text-gray-800 text-center leading-relaxed" id="riddle-text">
+          "Who is the best junior in Webwiz? (give answer in all small)"
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex-1 relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fas fa-lightbulb text-gray-400"></i>
+            </div>
+            <input
+              type="text"
+              id="answer-input"
+              placeholder="Type your answer here..."
+              class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white"
+            />
+          </div>
+          <button
+            id="submit-answer"
+            class="group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2"
+          >
+            <i class="fas fa-paper-plane group-hover:animate-bounce"></i>
+            <span>Submit Answer</span>
+          </button>
+        </div>
+
+        <div id="feedback" class="text-center"></div>
+      </div>
+
+      <!-- Hint Section -->
+      <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+        <div class="flex items-start space-x-3">
+          <i class="fas fa-lightbulb text-yellow-600 mt-1"></i>
+          <div>
+            <h3 class="font-semibold text-yellow-800 mb-2">Need a hint?</h3>
+            <p class="text-yellow-700 text-sm leading-relaxed">
+              Think about the context of this riddle. What organization or group is mentioned? 
+              The answer should be in lowercase letters only.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Success Container -->
-    <div
-      id="success-container"
-      class="bg-white shadow-md rounded-lg p-6 text-center hidden"
-    >
-      <h2 class="text-2xl font-semibold text-green-600 mb-2">You have solved the riddle!</h2>
-      <p class="text-gray-700">The secret code to become a member is:</p>
-      <p class="text-2xl font-mono bg-gray-100 px-6 py-3 rounded my-4 inline-block">
-        <%= memberCode %>
-      </p>
-      <a
-        href="/become-member"
-        class="inline-block mt-3 px-5 py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700 transition"
-      >
-        Use the Code
-      </a>
+    <div id="success-container" class="bg-white shadow-2xl rounded-2xl p-8 md:p-10 text-center hidden border border-green-200">
+      <div class="mb-6">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-4 animate-bounce">
+          <i class="fas fa-trophy text-white text-3xl"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-green-800 mb-3">
+          🎉 Congratulations! 🎉
+        </h2>
+        <p class="text-lg text-green-700 mb-2">You have successfully solved the riddle!</p>
+        <p class="text-gray-600">Here is your secret membership code:</p>
+      </div>
+
+      <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 mb-8 border border-green-200">
+        <p class="text-sm text-green-600 font-medium mb-2">YOUR SECRET CODE</p>
+        <p class="text-3xl font-mono font-bold text-green-800 bg-white px-6 py-4 rounded-lg shadow-inner border border-green-100 inline-block">
+          <%= memberCode %>
+        </p>
+        <p class="text-xs text-green-600 mt-2">Keep this code safe - you'll need it to become a member!</p>
+      </div>
+
+      <div class="space-y-4">
+        <a
+          href="/become-member"
+          class="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center space-x-2"
+        >
+          <i class="fas fa-unlock group-hover:animate-pulse"></i>
+          <span>Use Code to Become Member</span>
+        </a>
+        
+        <div class="text-center">
+          <button
+            onclick="copyToClipboard()"
+            class="group text-green-600 hover:text-green-700 font-medium transition-colors inline-flex items-center space-x-2"
+          >
+            <i class="fas fa-copy group-hover:animate-pulse"></i>
+            <span>Copy code to clipboard</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="mt-8 bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+        <i class="fas fa-info-circle text-blue-500"></i>
+        <span>About This Challenge</span>
+      </h3>
+      <div class="text-sm text-gray-600 space-y-2">
+        <p>This riddle is designed to ensure that only those familiar with the community can gain access.</p>
+        <p>Once you solve it, you'll receive a unique code that grants you full membership privileges.</p>
+      </div>
     </div>
 
   </div>
@@ -63,27 +138,86 @@
 
     const correctAnswer = "anupam";
 
-    submitButton.addEventListener("click", () => {
+    function showFeedback(message, isError = false) {
+      const bgColor = isError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200';
+      const textColor = isError ? 'text-red-700' : 'text-green-700';
+      const iconColor = isError ? 'text-red-500' : 'text-green-500';
+      const icon = isError ? 'fas fa-times-circle' : 'fas fa-check-circle';
+      
+      feedbackDiv.innerHTML = `
+        <div class="inline-flex items-center space-x-2 ${bgColor} ${textColor} px-4 py-3 rounded-lg border">
+          <i class="${icon} ${iconColor}"></i>
+          <span class="font-medium">${message}</span>
+        </div>
+      `;
+    }
+
+    function submitAnswer() {
       const userAnswer = answerInput.value.trim().toLowerCase();
+
+      if (!userAnswer) {
+        showFeedback("Please enter an answer before submitting.", true);
+        answerInput.focus();
+        return;
+      }
 
       if (userAnswer === correctAnswer) {
         feedbackDiv.innerHTML = "";
         riddleContainer.classList.add("hidden");
         successContainer.classList.remove("hidden");
+        
+        // Scroll to success container
+        successContainer.scrollIntoView({ behavior: 'smooth' });
       } else {
-        feedbackDiv.innerHTML =
-          '<p class="text-red-600">That is not correct. Ponder the question and try again.</p>';
+        showFeedback("That is not correct. Think carefully and try again!", true);
         answerInput.value = "";
         answerInput.focus();
+        
+        // Add shake animation to input
+        answerInput.classList.add("animate-pulse");
+        setTimeout(() => {
+          answerInput.classList.remove("animate-pulse");
+        }, 1000);
       }
-    });
+    }
+
+    submitButton.addEventListener("click", submitAnswer);
 
     answerInput.addEventListener("keyup", (event) => {
       if (event.key === "Enter") {
-        submitButton.click();
+        submitAnswer();
       }
     });
+
+    // Focus on input when page loads
+    answerInput.focus();
   });
+
+  function copyToClipboard() {
+    const code = "<%= memberCode %>";
+    navigator.clipboard.writeText(code).then(() => {
+      // Show temporary success message
+      const button = event.target.closest('button');
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-check text-green-600"></i> <span>Copied!</span>';
+      button.classList.add('text-green-600');
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('text-green-600');
+      }, 2000);
+    }).catch(() => {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = code;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      alert('Code copied to clipboard!');
+    });
+  }
 </script>
 
 <%- include('partials/footer') %>

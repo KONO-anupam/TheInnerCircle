@@ -1,150 +1,232 @@
 <%- include('partials/header', { title: 'Register' }) %>
 
-<div class="flex justify-center px-4 py-12">
+<div class="flex-grow flex justify-center px-4 py-12">
   <div class="w-full max-w-2xl">
-    <div class="bg-white shadow-md rounded-lg p-6 md:p-10">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold mb-2">Create an Account</h2>
-        <p class="text-gray-500">Join The Inner Circle today.</p>
-      </div>
-
-      <% if (typeof error !== 'undefined' && error) { %>
-      <div class="flex items-center bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-6">
-        <i class="fas fa-exclamation-triangle mr-2"></i>
-        <span><%= error %></span>
-      </div>
-      <% } %>
-
-      <form action="/register" method="post" class="space-y-6">
-        <!-- Name Fields -->
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="relative">
-            <input
-              type="text"
-              id="first_name"
-              name="first_name"
-              value="<%= typeof formData !== 'undefined' && formData.firstName ? formData.firstName : '' %>"
-              required
-              placeholder=" "
-              class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            <label for="first_name"
-              class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-              >First Name</label>
+    <div class="bg-white shadow-2xl rounded-2xl overflow-hidden">
+      <div class="p-8 md:p-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full mb-4">
+            <i class="fas fa-user-plus text-white text-2xl"></i>
           </div>
-          <div class="relative">
-            <input
-              type="text"
-              id="last_name"
-              name="last_name"
-              value="<%= typeof formData !== 'undefined' && formData.lastName ? formData.lastName : '' %>"
-              required
-              placeholder=" "
-              class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            <label for="last_name"
-              class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-              >Last Name</label>
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Join The Inner Circle</h2>
+          <p class="text-gray-600">Create your account and start connecting</p>
+        </div>
+
+        <!-- Error Message -->
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
+            <span class="text-red-700 font-medium"><%= error %></span>
           </div>
         </div>
+        <% } %>
 
-        <!-- Username -->
-        <div class="relative">
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value="<%= typeof formData !== 'undefined' && formData.username ? formData.username : '' %>"
-            required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <label for="username"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-            >Username</label>
-        </div>
+        <!-- Registration Form -->
+        <form action="/register" method="post" class="space-y-6">
+          <!-- Name Fields -->
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label for="first_name" class="block text-sm font-semibold text-gray-700">
+                First Name
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fas fa-user text-gray-400"></i>
+                </div>
+                <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  value="<%= typeof formData !== 'undefined' && formData.firstName ? formData.firstName : '' %>"
+                  placeholder="John"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+                />
+              </div>
+            </div>
+            
+            <div class="space-y-2">
+              <label for="last_name" class="block text-sm font-semibold text-gray-700">
+                Last Name
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fas fa-user text-gray-400"></i>
+                </div>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value="<%= typeof formData !== 'undefined' && formData.lastName ? formData.lastName : '' %>"
+                  placeholder="Doe"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+                />
+              </div>
+            </div>
+          </div>
 
-        <!-- Email -->
-        <div class="relative">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
-            required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <label for="email"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-            >Email address</label>
-        </div>
+          <!-- Username -->
+          <div class="space-y-2">
+            <label for="username" class="block text-sm font-semibold text-gray-700">
+              Username
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-at text-gray-400"></i>
+              </div>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="<%= typeof formData !== 'undefined' && formData.username ? formData.username : '' %>"
+                placeholder="johndoe"
+                required
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+              />
+            </div>
+          </div>
 
-        <!-- Password -->
-        <div class="relative">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            minlength="6"
-            required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <label for="password"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-            >Password</label>
-        </div>
+          <!-- Email -->
+          <div class="space-y-2">
+            <label for="email" class="block text-sm font-semibold text-gray-700">
+              Email Address
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-envelope text-gray-400"></i>
+              </div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+                placeholder="john@example.com"
+                required
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+              />
+            </div>
+          </div>
 
-        <!-- Confirm Password -->
-        <div class="relative">
-          <input
-            type="password"
-            id="confirm_password"
-            name="confirm_password"
-            minlength="6"
-            required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <label for="confirm_password"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-            >Confirm Password</label>
-        </div>
+          <!-- Password -->
+          <div class="space-y-2">
+            <label for="password" class="block text-sm font-semibold text-gray-700">
+              Password
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                minlength="6"
+                placeholder="Minimum 6 characters"
+                required
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+              />
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Must be at least 6 characters long</p>
+          </div>
 
-        <!-- Admin Code -->
-        <div class="relative">
-          <input
-            type="password"
-            id="admin_code"
-            name="admin_code"
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <label for="admin_code"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-            >Admin Code (Optional)</label>
-          <p class="text-sm text-gray-400 mt-1">
-            If you have an admin code, enter it here to register as an administrator.
-          </p>
-        </div>
+          <!-- Confirm Password -->
+          <div class="space-y-2">
+            <label for="confirm_password" class="block text-sm font-semibold text-gray-700">
+              Confirm Password
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                minlength="6"
+                placeholder="Confirm your password"
+                required
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+              />
+            </div>
+          </div>
 
-        <!-- Submit Button -->
-        <div>
+          <!-- Admin Code -->
+          <div class="space-y-2">
+            <label for="admin_code" class="block text-sm font-semibold text-gray-700">
+              Admin Code <span class="text-gray-400 font-normal">(Optional)</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-crown text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="admin_code"
+                name="admin_code"
+                placeholder="Enter admin code if you have one"
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
+              />
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
+              <p class="text-sm text-blue-700 flex items-start space-x-2">
+                <i class="fas fa-info-circle mt-0.5 text-blue-500"></i>
+                <span>If you have an admin code, enter it here to register as an administrator with special privileges.</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
           <button
             type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold py-3 rounded-md transition"
+            class="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2"
           >
-            <i class="fas fa-user-plus mr-2"></i>Register
+            <i class="fas fa-user-plus"></i>
+            <span>Create Account</span>
           </button>
-        </div>
-      </form>
+        </form>
 
-      <div class="text-center mt-6">
-        <p class="text-gray-500">
-          Already have an account?
-          <a href="/login" class="text-blue-600 hover:underline">Login</a>
-        </p>
+        <!-- Divider -->
+        <div class="relative my-8">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="bg-white px-4 text-gray-500">Already have an account?</span>
+          </div>
+        </div>
+
+        <!-- Login Link -->
+        <div class="text-center">
+          <a
+            href="/login"
+            class="group inline-flex items-center space-x-2 text-pink-600 hover:text-pink-700 font-medium transition-colors"
+          >
+            <i class="fas fa-sign-in-alt group-hover:animate-pulse"></i>
+            <span>Sign in instead</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="mt-8 bg-gray-50 rounded-xl p-6 text-center">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Why Join Us?</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+        <div class="flex items-center justify-center space-x-2">
+          <i class="fas fa-shield-alt text-green-500"></i>
+          <span>Secure & Private</span>
+        </div>
+        <div class="flex items-center justify-center space-x-2">
+          <i class="fas fa-users text-blue-500"></i>
+          <span>Active Community</span>
+        </div>
+        <div class="flex items-center justify-center space-x-2">
+          <i class="fas fa-star text-yellow-500"></i>
+          <span>Exclusive Content</span>
+        </div>
       </div>
     </div>
   </div>

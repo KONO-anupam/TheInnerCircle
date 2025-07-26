@@ -1,73 +1,155 @@
 <%- include('partials/header', { title: 'Become a Member' }) %>
 
-<div class="max-w-4xl mx-auto px-4 py-12">
-  <div class="flex justify-center">
-    <div class="w-full max-w-md">
-      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div class="p-6 md:p-8">
-          <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Become a Full Member</h2>
-            <p class="text-gray-500">Unlock full access by entering the secret passcode.</p>
+<div class="flex-grow flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md">
+    <div class="bg-white shadow-2xl rounded-2xl overflow-hidden">
+      <div class="p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full mb-4">
+            <i class="fas fa-star text-white text-2xl"></i>
           </div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Become a Full Member</h2>
+          <p class="text-gray-600">Unlock full access by entering the secret passcode</p>
+        </div>
 
-          <% if (locals.error && locals.error.length > 0) { %>
-          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">
+        <!-- Error Message -->
+        <% if (locals.error && locals.error.length > 0) { %>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
+            <span class="text-red-700 font-medium">
               <%= Array.isArray(error) ? error.join(', ') : error %>
             </span>
           </div>
-          <% } %>
+        </div>
+        <% } %>
 
-          <% if (user.is_member) { %>
-          <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-5 rounded text-center mb-4" role="alert">
-            <h4 class="text-xl font-semibold mb-2 flex items-center justify-center gap-2">
-              <i class="fas fa-check-circle"></i>
+        <!-- Already Member Success State -->
+        <% if (user.is_member) { %>
+        <div class="text-center">
+          <div class="bg-green-50 border border-green-200 rounded-2xl p-8 mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
+              <i class="fas fa-check-circle text-white text-2xl animate-pulse"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-green-800 mb-3">
               You Are Already a Member!
-            </h4>
-            <p>You have full access to all community features.</p>
-            <div class="my-4">
-              <a href="/messages" class="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
-                <i class="fas fa-tachometer-alt"></i>
-                Go to Dashboard
+            </h3>
+            <p class="text-green-700 mb-6 leading-relaxed">
+              You have full access to all community features and can participate in all discussions.
+            </p>
+            
+            <div class="space-y-3">
+              <a href="/messages" class="group w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center space-x-2">
+                <i class="fas fa-tachometer-alt group-hover:animate-spin"></i>
+                <span>Go to Dashboard</span>
+              </a>
+              
+              <a href="/create-message" class="group w-full border-2 border-green-500 text-green-700 hover:bg-green-50 font-semibold py-3 px-6 rounded-xl transition-all duration-300 inline-flex items-center justify-center space-x-2">
+                <i class="fas fa-plus-circle group-hover:animate-bounce"></i>
+                <span>Create New Post</span>
               </a>
             </div>
           </div>
-          <% } else { %>
+        </div>
+        <% } else { %>
 
-          <form action="/become-member" method="post" class="space-y-5">
-            <div>
-              <label for="secret_code" class="block text-sm font-medium text-gray-700 mb-1">Secret Passcode</label>
+        <!-- Membership Form -->
+        <form action="/become-member" method="post" class="space-y-6">
+          <div class="space-y-3">
+            <label for="secret_code" class="block text-lg font-semibold text-gray-900">
+              Secret Passcode
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-key text-gray-400"></i>
+              </div>
               <input
                 type="password"
                 id="secret_code"
                 name="secret_code"
-                placeholder="Secret Passcode"
+                placeholder="Enter the secret passcode"
                 required
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white"
               />
             </div>
-
-            <button
-              type="submit"
-              class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-md text-lg hover:bg-blue-700 transition"
-            >
-              <i class="fas fa-lock-open"></i> Unlock Membership
-            </button>
-          </form>
-
-          <hr class="my-6" />
-
-          <div class="text-center">
-            <p class="text-gray-600 mb-2">Don't have the code?</p>
-            <a href="/get-the-code" class="inline-block border border-gray-400 px-4 py-2 rounded hover:bg-gray-100 transition">
-              Solve the Riddle to Get It
-            </a>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <p class="text-sm text-yellow-700 flex items-start space-x-2">
+                <i class="fas fa-info-circle mt-0.5 text-yellow-600"></i>
+                <span>This passcode grants you access to exclusive member features and content.</span>
+              </p>
+            </div>
           </div>
 
-          <% } %>
+          <button
+            type="submit"
+            class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-3"
+          >
+            <i class="fas fa-unlock text-xl"></i>
+            <span>Unlock Membership</span>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative my-8">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="bg-white px-4 text-gray-500">Don't have the code?</span>
+          </div>
+        </div>
+
+        <!-- Get Code Link -->
+        <div class="text-center">
+          <div class="mb-4">
+            <p class="text-gray-600 mb-3">Need to get the passcode first?</p>
+            <a href="/get-the-code" class="group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center space-x-2">
+              <i class="fas fa-puzzle-piece group-hover:animate-bounce"></i>
+              <span>Solve the Riddle to Get It</span>
+            </a>
+          </div>
+        </div>
+
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Membership Benefits -->
+    <% if (!user.is_member) { %>
+    <div class="mt-8 bg-gray-50 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 text-center flex items-center justify-center space-x-2">
+        <i class="fas fa-crown text-yellow-500"></i>
+        <span>Member Benefits</span>
+      </h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex items-center space-x-3 text-gray-700">
+          <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-check text-green-600 text-xs"></i>
+          </div>
+          <span>Create and share your own posts</span>
+        </div>
+        <div class="flex items-center space-x-3 text-gray-700">
+          <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-check text-green-600 text-xs"></i>
+          </div>
+          <span>See author names and timestamps</span>
+        </div>
+        <div class="flex items-center space-x-3 text-gray-700">
+          <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-check text-green-600 text-xs"></i>
+          </div>
+          <span>Access to exclusive member content</span>
+        </div>
+        <div class="flex items-center space-x-3 text-gray-700">
+          <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-check text-green-600 text-xs"></i>
+          </div>
+          <span>Full community participation</span>
         </div>
       </div>
     </div>
+    <% } %>
   </div>
 </div>
 

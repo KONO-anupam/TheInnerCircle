@@ -1,76 +1,152 @@
 <%- include('partials/header', { title: 'Welcome to The Inner Circle' }) %>
 
-<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-5xl mx-auto text-center flex flex-col items-center justify-center">
-    <div class="py-10">
-      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
-        Welcome to
-        <span class="text-indigo-600">The Inner Circle</span>
-      </h1>
-      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-        A private and secure place for members to share their thoughts and
-        connect with like-minded individuals.
-      </p>
+<div class="flex-grow">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+      <div class="text-center">
+        <div class="mb-8">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-pink-500 rounded-full mb-6 animate-pulse">
+            <i class="fas fa-user-secret text-3xl"></i>
+          </div>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            Welcome to
+            <span class="bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">
+              The Inner Circle
+            </span>
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            A private and secure place for members to share their thoughts and
+            connect with like-minded individuals.
+          </p>
+        </div>
 
-      <% if (typeof user === 'undefined' || !user) { %>
-      <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-        <a
-          href="/register"
-          class="inline-flex items-center justify-center px-6 py-3 text-white bg-indigo-600 hover:bg-indigo-700 text-lg font-medium rounded-lg shadow"
-        >
-          Get Started
-        </a>
-        <a
-          href="/login"
-          class="inline-flex items-center justify-center px-6 py-3 border border-gray-400 text-gray-700 hover:bg-gray-100 text-lg font-medium rounded-lg"
-        >
-          Login
-        </a>
+        <% if (typeof user === 'undefined' || !user) { %>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a
+            href="/register"
+            class="group bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-2"
+          >
+            <i class="fas fa-rocket group-hover:animate-bounce"></i>
+            <span>Get Started</span>
+          </a>
+          <a
+            href="/login"
+            class="group border-2 border-gray-600 hover:border-pink-500 text-gray-300 hover:text-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-pink-500/10 transition-all duration-300 flex items-center space-x-2"
+          >
+            <i class="fas fa-sign-in-alt group-hover:text-pink-400"></i>
+            <span>Login</span>
+          </a>
+        </div>
+        <% } else { %>
+        <div>
+          <a
+            href="/messages"
+            class="group bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center space-x-2"
+          >
+            <i class="fas fa-tachometer-alt group-hover:animate-pulse"></i>
+            <span>Go to Dashboard</span>
+          </a>
+        </div>
+        <% } %>
       </div>
-      <% } else { %>
-      <div class="mt-6">
-        <a
-          href="/messages"
-          class="inline-flex items-center justify-center px-6 py-3 text-white bg-indigo-600 hover:bg-indigo-700 text-lg font-medium rounded-lg shadow"
-        >
-          Go to Dashboard
-        </a>
-      </div>
-      <% } %>
     </div>
+  </div>
 
-    <hr class="w-full border-gray-300 my-10" />
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-      <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center">
-        <div class="w-12 h-12 mb-4 rounded-full flex items-center justify-center text-white text-xl" style="background-color: var(--secondary-color)">
-          <i class="fas fa-lock"></i>
-        </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Exclusive Content</h3>
-        <p class="text-sm text-gray-600">
-          Only members can see the content shared by others. Your privacy is our priority.
+  <!-- Features Section -->
+  <div class="bg-gray-50 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Why Join The Inner Circle?
+        </h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Experience exclusive features designed for meaningful connections
         </p>
       </div>
 
-      <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center">
-        <div class="w-12 h-12 mb-4 rounded-full flex items-center justify-center text-white text-xl" style="background-color: var(--secondary-color)">
-          <i class="fas fa-star"></i>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border border-gray-100">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-lock text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Exclusive Content</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Only members can see the content shared by others. Your privacy is our top priority with advanced security measures.
+          </p>
         </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Become a Member</h3>
-        <p class="text-sm text-gray-600">
-          Unlock full access by becoming a member and start sharing your own messages.
-        </p>
+
+        <!-- Feature 2 -->
+        <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border border-gray-100">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-star text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Become a Member</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Unlock full access by becoming a member and start sharing your own messages with our vibrant community.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border border-gray-100">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-shield-alt text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Admin Moderation</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Admins actively manage content, ensuring a safe, respectful, and high-quality community environment.
+          </p>
+        </div>
       </div>
 
-      <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center">
-        <div class="w-12 h-12 mb-4 rounded-full flex items-center justify-center text-white text-xl" style="background-color: var(--secondary-color)">
-          <i class="fas fa-shield-alt"></i>
+      <!-- Stats Section -->
+      <div class="mt-20 bg-white rounded-3xl shadow-xl p-8 md:p-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div class="group">
+            <div class="text-4xl font-bold text-pink-500 mb-2 group-hover:scale-110 transition-transform">100+</div>
+            <div class="text-gray-600 font-medium">Active Members</div>
+          </div>
+          <div class="group">
+            <div class="text-4xl font-bold text-pink-500 mb-2 group-hover:scale-110 transition-transform">500+</div>
+            <div class="text-gray-600 font-medium">Posts Shared</div>
+          </div>
+          <div class="group">
+            <div class="text-4xl font-bold text-pink-500 mb-2 group-hover:scale-110 transition-transform">24/7</div>
+            <div class="text-gray-600 font-medium">Community Support</div>
+          </div>
         </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Admin Moderation</h3>
-        <p class="text-sm text-gray-600">
-          Admins have the ability to manage content, ensuring a safe and respectful community.
-        </p>
       </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="bg-gradient-to-r from-pink-500 to-pink-600 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Ready to Join Our Community?
+      </h2>
+      <p class="text-xl mb-8 opacity-90">
+        Start your journey today and connect with amazing people
+      </p>
+      
+      <% if (typeof user === 'undefined' || !user) { %>
+      <a
+        href="/register"
+        class="bg-white text-pink-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center space-x-2"
+      >
+        <i class="fas fa-arrow-right"></i>
+        <span>Join Now</span>
+      </a>
+      <% } else { %>
+      <a
+        href="/messages"
+        class="bg-white text-pink-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center space-x-2"
+      >
+        <i class="fas fa-comments"></i>
+        <span>View Messages</span>
+      </a>
+      <% } %>
     </div>
   </div>
 </div>

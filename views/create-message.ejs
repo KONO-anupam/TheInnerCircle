@@ -1,49 +1,161 @@
 <%- include('partials/header', { title: 'Create a New Post' }) %>
 
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="w-full max-w-2xl">
-    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Create a New Post</h2>
-        <p class="mt-2 text-sm text-gray-500">Share your thoughts with the community.</p>
+<div class="flex-grow flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-3xl">
+    <div class="bg-white shadow-2xl rounded-2xl overflow-hidden">
+      <div class="p-8 md:p-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full mb-4">
+            <i class="fas fa-pen-fancy text-white text-2xl"></i>
+          </div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Share Your Thoughts</h2>
+          <p class="text-gray-600">Create a new post for the Inner Circle community</p>
+        </div>
+
+        <!-- Form -->
+        <form action="/create-message" method="post" class="space-y-8">
+          <!-- Title Field -->
+          <div class="space-y-3">
+            <label for="title" class="block text-lg font-semibold text-gray-900">
+              Post Title
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-heading text-gray-400"></i>
+              </div>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="What's your post about?"
+                required
+                maxlength="100"
+                class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white"
+              />
+            </div>
+            <p class="text-sm text-gray-500 flex items-center space-x-1">
+              <i class="fas fa-info-circle"></i>
+              <span>Choose a clear, engaging title that captures your message</span>
+            </p>
+          </div>
+
+          <!-- Message Field -->
+          <div class="space-y-3">
+            <label for="text" class="block text-lg font-semibold text-gray-900">
+              Your Message
+            </label>
+            <div class="relative">
+              <textarea
+                id="text"
+                name="text"
+                placeholder="Share your thoughts, ideas, or experiences with the community..."
+                required
+                rows="8"
+                maxlength="1000"
+                class="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white resize-none"
+              ></textarea>
+              <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                <span id="char-count">0</span>/1000
+              </div>
+            </div>
+            <div class="flex items-start space-x-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <i class="fas fa-lightbulb text-blue-500 mt-0.5"></i>
+              <div class="text-sm text-blue-700">
+                <p class="font-medium mb-1">Tips for a great post:</p>
+                <ul class="list-disc list-inside space-y-1 text-blue-600">
+                  <li>Be authentic and share your genuine thoughts</li>
+                  <li>Keep it engaging and respectful</li>
+                  <li>Consider asking questions to spark discussion</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-6">
+            <button
+              type="submit"
+              class="group flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-3"
+            >
+              <i class="fas fa-paper-plane group-hover:animate-bounce"></i>
+              <span>Publish Post</span>
+            </button>
+            
+            <a
+              href="/messages"
+              class="group flex-1 border-2 border-gray-300 hover:border-pink-500 text-gray-700 hover:text-pink-600 font-semibold py-4 px-8 rounded-xl hover:bg-pink-50 transition-all duration-300 flex items-center justify-center space-x-3"
+            >
+              <i class="fas fa-arrow-left group-hover:animate-pulse"></i>
+              <span>Back to Feed</span>
+            </a>
+          </div>
+        </form>
       </div>
+    </div>
 
-      <form action="/create-message" method="post" class="space-y-6">
-        <div>
-          <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Post Title"
-            required
-            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+    <!-- Community Guidelines -->
+    <div class="mt-8 bg-gray-50 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+        <i class="fas fa-shield-alt text-green-500"></i>
+        <span>Community Guidelines</span>
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+        <div class="flex items-start space-x-3">
+          <i class="fas fa-heart text-pink-500 mt-1"></i>
+          <div>
+            <div class="font-medium text-gray-900">Be Respectful</div>
+            <div>Treat all community members with kindness and respect</div>
+          </div>
         </div>
-
-        <div>
-          <label for="text" class="block text-sm font-medium text-gray-700">Message</label>
-          <textarea
-            id="text"
-            name="text"
-            placeholder="What's on your mind?"
-            required
-            rows="6"
-            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
-          ></textarea>
+        <div class="flex items-start space-x-3">
+          <i class="fas fa-ban text-red-500 mt-1"></i>
+          <div>
+            <div class="font-medium text-gray-900">No Spam</div>
+            <div>Keep content relevant and avoid repetitive posting</div>
+          </div>
         </div>
-
-        <div>
-          <button
-            type="submit"
-            class="w-full flex items-center justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition"
-          >
-            Submit Post
-          </button>
+        <div class="flex items-start space-x-3">
+          <i class="fas fa-lock text-blue-500 mt-1"></i>
+          <div>
+            <div class="font-medium text-gray-900">Privacy First</div>
+            <div>Don't share personal information of others</div>
+          </div>
         </div>
-      </form>
+        <div class="flex items-start space-x-3">
+          <i class="fas fa-comments text-purple-500 mt-1"></i>
+          <div>
+            <div class="font-medium text-gray-900">Engage Thoughtfully</div>
+            <div>Contribute meaningfully to discussions</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Character counter
+  const textarea = document.getElementById('text');
+  const charCount = document.getElementById('char-count');
+  
+  textarea.addEventListener('input', function() {
+    charCount.textContent = this.value.length;
+    
+    if (this.value.length > 900) {
+      charCount.classList.add('text-red-500');
+      charCount.classList.remove('text-gray-400');
+    } else {
+      charCount.classList.remove('text-red-500');
+      charCount.classList.add('text-gray-400');
+    }
+  });
+
+  // Auto-resize textarea
+  textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+  });
+</script>
 
 <%- include('partials/footer') %>
