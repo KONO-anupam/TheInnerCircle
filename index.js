@@ -9,6 +9,7 @@ const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const pool = require("./db");
 const flash = require("connect-flash");
+const fetch = require("node-fetch");
 
 const authRoutes = require("./routes/auth");
 const app = express();
@@ -45,7 +46,6 @@ app.use(
     },
   })
 );
-
 
 app.use(flash());
 
@@ -86,17 +86,13 @@ app.get("/", (req, res) => {
   res.render("index", { user: req.user });
 });
 app.get("/register", (req, res) => {
-   res.render("register", {
+  res.render("register", {
     user: req.user,
-    error: req.flash("error")[0]?.msg || [],
+    error: req.flash("error") || [],
     formData: req.flash("formData")[0],
   });
 });
 app.get("/login", (req, res) => {
-  const successMessage =
-    req.query.registered === "true"
-      ? "Registration successful! Please log in with your credentials."
-      : null;
   const successMessage = req.flash("success");
   res.render("login", {
     successMessage,
@@ -104,6 +100,30 @@ app.get("/login", (req, res) => {
     error: req.flash("error"),
   });
 });
-app.listen(3000, () => {
-  console.log("Server Started on Port 3000");
+
+// Self-pinging route to keep the server alive
+app.get("/self-ping", (req, res) => {
+  res.status(200).send("Pinged self.");
+});
+
+const PORT = 3000;
+const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+
+  // Start self-pinging only in production
+  if (process.env.NODE_ENV === "production") {
+    setInterval(() => {
+      fetch(`${APP_URL}/self-ping`)
+        .then((res) => {
+          if (res.ok) {
+            console.log("Self-ping successful.");
+          } else {
+            console.error("Self-ping failed:", res.statusText);
+          }
+        })
+        .catch((err) => console.error("Error during self-ping:", err));
+    }, 13 * 60 * 1000); // 13 minutes
+  }
 });
