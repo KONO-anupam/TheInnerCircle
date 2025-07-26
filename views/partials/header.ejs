@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title || 'Members Only' %></title>
+    
+    <!-- Tailwind CDN (for dev; use PostCSS build in prod) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Optional: Custom styles -->
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body class="text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3">
+            <a href="/" class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fas fa-users text-blue-500"></i> Members Only
+            </a>
+          </div>
+
+          <!-- Mobile Toggle Button (optional, for dropdown menu) -->
+          <div class="block md:hidden">
+            <button id="mobile-menu-button" class="text-gray-400 focus:outline-none focus:text-white">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+
+          <!-- Navigation links -->
+          <div class="hidden md:flex space-x-6">
+            <a href="/" class="text-gray-300 hover:text-white transition">Home</a>
+            <a href="/about" class="text-gray-300 hover:text-white transition">About</a>
+          </div>
+
+          <!-- Auth links -->
+          <div class="hidden md:flex space-x-4">
+            <a href="/login" class="text-gray-300 hover:text-white transition">Login</a>
+            <a href="/register" class="text-gray-300 hover:text-white transition">Register</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile menu (optional) -->
+      <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+        <a href="/" class="block text-gray-300 hover:text-white">Home</a>
+        <a href="/about" class="block text-gray-300 hover:text-white">About</a>
+        <a href="/login" class="block text-gray-300 hover:text-white">Login</a>
+        <a href="/register" class="block text-gray-300 hover:text-white">Register</a>
+      </div>
+
+      <script>
+        // Toggle mobile menu
+        document.addEventListener('DOMContentLoaded', () => {
+          const btn = document.getElementById('mobile-menu-button');
+          const menu = document.getElementById('mobile-menu');
+          if (btn && menu) {
+            btn.addEventListener('click', () => {
+              menu.classList.toggle('hidden');
+            });
+          }
+        });
+      </script>
+    </nav>
+
+    <!-- Page Content Wrapper -->
+    <div class="max-w-6xl mx-auto px-4 py-8 main-content">
