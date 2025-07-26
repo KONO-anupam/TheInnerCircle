@@ -4,78 +4,131 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title || 'Members Only' %></title>
-    
-    <!-- Tailwind CDN (for dev; use PostCSS build in prod) -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
     />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Optional: Custom styles -->
     <style>
-      body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+      .text-pink {
+        color: #e91e63;
       }
     </style>
   </head>
-  <body class="text-white">
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-gray-900 text-white">
+      <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
+        <a class="text-xl font-bold flex items-center gap-2" href="/">
+          <i class="fas fa-users"></i> Members Only
+        </a>
+        <button
+          class="lg:hidden text-white"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <!-- Navbar -->
-    <nav class="bg-gray-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <div class="flex items-center space-x-3">
-            <a href="/" class="text-xl font-bold text-white flex items-center gap-2">
-              <i class="fas fa-users text-blue-500"></i> Members Only
-            </a>
-          </div>
+        <div class="w-full lg:flex lg:items-center lg:justify-between hidden lg:block mt-4 lg:mt-0" id="navbarNav">
+          <ul class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+            <li>
+              <a href="/" class="hover:text-gray-300 flex items-center gap-2">
+                <i class="fas fa-home"></i> Home
+              </a>
+            </li>
+            <% if (typeof user !== 'undefined' && user) { %>
+              <li>
+                <a href="/dashboard" class="hover:text-gray-300 flex items-center gap-2">
+                  <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+              </li>
+              <% if (user.is_member) { %>
+                <li>
+                  <a href="/create-message" class="hover:text-gray-300 flex items-center gap-2">
+                    <i class="fas fa-pen-fancy"></i> Create Message
+                  </a>
+                </li>
+              <% } else { %>
+                <li>
+                  <a href="/become-member" class="hover:text-gray-300 flex items-center gap-2">
+                    <i class="fas fa-star"></i> Become Member
+                  </a>
+                </li>
+              <% } %>
+            <% } %>
+          </ul>
 
-          <!-- Mobile Toggle Button (optional, for dropdown menu) -->
-          <div class="block md:hidden">
-            <button id="mobile-menu-button" class="text-gray-400 focus:outline-none focus:text-white">
-              <i class="fas fa-bars text-xl"></i>
-            </button>
-          </div>
+          <!-- Right side nav -->
+          <ul class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6 mt-4 lg:mt-0">
+            <% if (typeof user !== 'undefined' && user) { %>
+              <!-- Logged in dropdown -->
+              <li class="relative group">
+                <button class="flex items-center gap-2 hover:text-gray-300">
+                  <i class="fas fa-user-circle"></i>
+                  <%= user.first_name %> <%= user.last_name %>
+                  <% if (user.is_member) { %>
+                    <span class="bg-yellow-400 text-black text-xs px-1 rounded">
+                      <i class="fas fa-star"></i>
+                    </span>
+                  <% } %>
+                  <% if (user.is_admin) { %>
+                    <span class="bg-red-600 text-white text-xs px-1 rounded">
+                      <i class="fas fa-crown"></i>
+                    </span>
+                  <% } %>
+                </button>
 
-          <!-- Navigation links -->
-          <div class="hidden md:flex space-x-6">
-            <a href="/" class="text-gray-300 hover:text-white transition">Home</a>
-            <a href="/about" class="text-gray-300 hover:text-white transition">About</a>
-          </div>
-
-          <!-- Auth links -->
-          <div class="hidden md:flex space-x-4">
-            <a href="/login" class="text-gray-300 hover:text-white transition">Login</a>
-            <a href="/register" class="text-gray-300 hover:text-white transition">Register</a>
-          </div>
+                <ul class="absolute hidden group-hover:block right-0 bg-white text-black shadow-md rounded w-56 mt-2 z-50">
+                  <li class="px-4 py-2 text-sm font-semibold border-b flex items-center gap-2">
+                    <i class="fas fa-info-circle text-blue-500"></i> Account Info
+                  </li>
+                  <li class="px-4 py-2 text-sm">
+                    <small class="text-gray-500 block">@<%= user.username %></small>
+                    <small class="text-gray-500 block"><%= user.email %></small>
+                  </li>
+                  <li><hr class="my-1" /></li>
+                  <% if (!user.is_member) { %>
+                    <li>
+                      <a href="/become-member" class="block px-4 py-2 text-sm hover:bg-gray-100">
+                        <i class="fas fa-star text-yellow-500 mr-2"></i> Become Member
+                      </a>
+                    </li>
+                  <% } %>
+                  <li>
+                    <form action="/logout" method="post">
+                      <button
+                        type="submit"
+                        class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      >
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                      </button>
+                    </form>
+                  </li>
+                </ul>
+              </li>
+            <% } else { %>
+              <!-- Not logged in -->
+              <li>
+                <a href="/login" class="hover:text-gray-300 flex items-center gap-2">
+                  <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+              </li>
+              <li>
+                <a href="/register" class="hover:text-gray-300 flex items-center gap-2">
+                  <i class="fas fa-user-plus"></i> Register
+                </a>
+              </li>
+            <% } %>
+          </ul>
         </div>
       </div>
-
-      <!-- Mobile menu (optional) -->
-      <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
-        <a href="/" class="block text-gray-300 hover:text-white">Home</a>
-        <a href="/about" class="block text-gray-300 hover:text-white">About</a>
-        <a href="/login" class="block text-gray-300 hover:text-white">Login</a>
-        <a href="/register" class="block text-gray-300 hover:text-white">Register</a>
-      </div>
-
-      <script>
-        // Toggle mobile menu
-        document.addEventListener('DOMContentLoaded', () => {
-          const btn = document.getElementById('mobile-menu-button');
-          const menu = document.getElementById('mobile-menu');
-          if (btn && menu) {
-            btn.addEventListener('click', () => {
-              menu.classList.toggle('hidden');
-            });
-          }
-        });
-      </script>
     </nav>
 
-    <!-- Page Content Wrapper -->
-    <div class="max-w-6xl mx-auto px-4 py-8 main-content">
+    <main class="container mx-auto px-4 py-8">
+      <!-- Main content goes here -->
+    </main>
+  </body>
+</html>
