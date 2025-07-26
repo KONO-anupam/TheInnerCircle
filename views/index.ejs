@@ -1,176 +1,93 @@
-<%- include('partials/header', { title: 'Home - Members Only' }) %>
+<%- include('partials/header', { title: 'Welcome to The Inner Circle' }) %>
 
-<!-- Hero Section -->
-<section class="relative overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-20">
-  <div class="absolute inset-0 bg-[url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23ffffff\" fill-opacity=\"0.1\"><circle cx=\"30\" cy=\"30\" r=\"2\"/></g></svg>')] animate-[float_20s_linear_infinite]"></div>
-  <div class="relative z-10 max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-    <div class="space-y-6">
-      <h1 class="text-4xl md:text-5xl font-bold">Welcome to <span class="text-yellow-300">Members Only</span></h1>
-      <p class="text-lg">Join an exclusive community where your voice matters. Connect, share, and engage with verified members in a secure environment.</p>
-      <% if (!user) { %>
-      <div class="flex flex-wrap gap-4">
-        <a href="/register" class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold shadow pulse-btn"><i class="fas fa-user-plus mr-2"></i>Join Now</a>
-        <a href="/login" class="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</a>
+<div class="px-4 py-12 max-w-7xl mx-auto">
+  <!-- Hero Section -->
+  <div class="flex flex-col-reverse lg:flex-row items-center gap-12">
+    <div class="w-full lg:w-1/2">
+      <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-4">
+        Welcome to
+        <span class="text-indigo-600">The Inner Circle</span>
+      </h1>
+      <p class="text-gray-600 text-lg mb-6">
+        A private and secure place for members to share their thoughts and
+        connect with like-minded individuals.
+      </p>
+
+      <% if (typeof user === 'undefined' || !user) { %>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a
+          href="/register"
+          class="bg-blue-600 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-blue-700 transition"
+        >
+          Get Started
+        </a>
+        <a
+          href="/login"
+          class="border border-gray-400 text-gray-700 px-6 py-3 text-lg font-semibold rounded-md hover:bg-gray-100 transition"
+        >
+          Login
+        </a>
       </div>
       <% } else { %>
-      <div class="flex flex-wrap gap-4">
-        <a href="/dashboard" class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold shadow"><i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard</a>
-        <% if (!user.is_member) { %>
-        <a href="/become-member" class="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700"><i class="fas fa-crown mr-2"></i>Become a Member</a>
-        <% } %>
-      </div>
+      <a
+        href="/dashboard"
+        class="bg-blue-600 text-white px-6 py-3 text-lg font-semibold rounded-md hover:bg-blue-700 transition"
+      >
+        Go to Dashboard
+      </a>
       <% } %>
     </div>
-    <div class="text-center">
-      <i class="fas fa-shield-alt text-[15rem] opacity-20"></i>
+
+    <!-- Icon -->
+    <div class="w-full lg:w-1/2 flex justify-center">
+      <i class="fas fa-users text-[10rem] text-blue-300 opacity-10"></i>
     </div>
   </div>
-</section>
 
-<!-- Stats Section -->
-<section class="bg-gradient-to-br from-gray-100 to-gray-200 py-12">
-  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-    <div>
-      <span class="text-5xl font-bold text-indigo-500 stat-number" data-count="1000">0</span>
-      <h5 class="mt-2 font-semibold">Active Members</h5>
+  <!-- Divider -->
+  <hr class="my-12 border-gray-300" />
+
+  <!-- Features Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+    <!-- Feature 1 -->
+    <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col items-center">
+      <div
+        class="text-white bg-indigo-600 w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4"
+      >
+        <i class="fas fa-lock"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-2">Exclusive Content</h3>
+      <p class="text-gray-600">
+        Only members can see the content shared by others. Your privacy is our priority.
+      </p>
     </div>
-    <div>
-      <span class="text-5xl font-bold text-indigo-500 stat-number" data-count="5000">0</span>
-      <h5 class="mt-2 font-semibold">Messages Shared</h5>
+
+    <!-- Feature 2 -->
+    <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col items-center">
+      <div
+        class="text-white bg-indigo-600 w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4"
+      >
+        <i class="fas fa-star"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-2">Become a Member</h3>
+      <p class="text-gray-600">
+        Unlock full access by becoming a member and start sharing your own messages.
+      </p>
     </div>
-    <div>
-      <span class="text-5xl font-bold text-indigo-500 stat-number" data-count="99">0</span>
-      <h5 class="mt-2 font-semibold">Security Score</h5>
-    </div>
-    <div>
-      <span class="text-5xl font-bold text-indigo-500 stat-number" data-count="24">0</span>
-      <h5 class="mt-2 font-semibold">Hours Support</h5>
+
+    <!-- Feature 3 -->
+    <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col items-center">
+      <div
+        class="text-white bg-indigo-600 w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4"
+      >
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-2">Admin Moderation</h3>
+      <p class="text-gray-600">
+        Admins have the ability to manage content, ensuring a safe and respectful community.
+      </p>
     </div>
   </div>
-</section>
-
-<!-- Features Section -->
-<section class="py-16">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-3">Why Choose Members Only?</h2>
-      <p class="text-lg text-gray-600">Experience the difference of a truly exclusive community</p>
-    </div>
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- Feature Cards -->
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-shield-alt text-4xl text-indigo-600 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Bank-Grade Security</h5>
-        <p class="text-gray-500">Your privacy and data are protected with enterprise-level encryption and security protocols.</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-crown text-4xl text-yellow-500 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Exclusive Access</h5>
-        <p class="text-gray-500">Join a curated community of verified members with special privileges and insider content.</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-comments text-4xl text-green-500 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Rich Discussions</h5>
-        <p class="text-gray-500">Engage in meaningful conversations and share insights with like-minded individuals.</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-bolt text-4xl text-red-500 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Lightning Fast</h5>
-        <p class="text-gray-500">Experience blazing-fast performance with our optimized platform and infrastructure.</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-mobile-alt text-4xl text-cyan-500 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Mobile Ready</h5>
-        <p class="text-gray-500">Access your community anywhere, anytime with our fully responsive design.</p>
-      </div>
-      <div class="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:-translate-y-2">
-        <i class="fas fa-heart text-4xl text-pink-500 mb-4"></i>
-        <h5 class="text-lg font-bold mb-2">Community First</h5>
-        <p class="text-gray-500">Built by the community, for the community. Your feedback shapes our evolution.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Testimonials Section -->
-<section class="py-16 bg-gray-100">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-3">What Our Members Say</h2>
-      <p class="text-lg text-gray-600">Don't just take our word for it</p>
-    </div>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl shadow-lg p-6 relative">
-        <p class="mb-4">"The level of engagement and quality discussions here is unmatched. It's refreshing to be part of a community that values privacy and meaningful connections."</p>
-        <div class="flex items-center">
-          <div class="bg-indigo-600 text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
-            <i class="fas fa-user"></i>
-          </div>
-          <div>
-            <strong>Alex Thompson</strong><br />
-            <small class="text-gray-500">Premium Member</small>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-lg p-6 relative">
-        <p class="mb-4">"Finally, a platform where I can share my thoughts without worrying about data privacy. The member verification process ensures quality interactions."</p>
-        <div class="flex items-center">
-          <div class="bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
-            <i class="fas fa-user"></i>
-          </div>
-          <div>
-            <strong>Sarah Johnson</strong><br />
-            <small class="text-gray-500">Founding Member</small>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-lg p-6 relative">
-        <p class="mb-4">"The exclusive content and insider discussions have been invaluable for my professional growth. This community is a game-changer."</p>
-        <div class="flex items-center">
-          <div class="bg-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
-            <i class="fas fa-user"></i>
-          </div>
-          <div>
-            <strong>Michael Chen</strong><br />
-            <small class="text-gray-500">VIP Member</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Section -->
-<% if (!user) { %>
-<section class="bg-gradient-to-br from-purple-600 to-indigo-500 text-white py-16">
-  <div class="max-w-4xl mx-auto px-4 text-center">
-    <h2 class="text-4xl font-bold mb-4">Ready to Join the Elite?</h2>
-    <p class="text-lg mb-6">Don't miss out on exclusive content, insider discussions, and a community that values your privacy and voice.</p>
-    <a href="/register" class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold shadow pulse-btn mr-4"><i class="fas fa-rocket mr-2"></i>Get Started Today</a>
-    <a href="/login" class="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700"><i class="fas fa-sign-in-alt mr-2"></i>Already a Member?</a>
-  </div>
-</section>
-<% } %>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const counters = document.querySelectorAll(".stat-number");
-    const speed = 200;
-    counters.forEach((counter) => {
-      const updateCount = () => {
-        const target = +counter.getAttribute("data-count");
-        const count = +counter.innerText;
-        const inc = target / speed;
-        if (count < target) {
-          counter.innerText = Math.ceil(count + inc);
-          setTimeout(updateCount, 1);
-        } else {
-          counter.innerText = target;
-        }
-      };
-      updateCount();
-    });
-  });
-</script>
+</div>
 
 <%- include('partials/footer') %>

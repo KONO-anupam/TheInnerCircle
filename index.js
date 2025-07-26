@@ -10,13 +10,9 @@ const pgSession = require("connect-pg-simple")(session);
 const pool = require("./db");
 
 const authRoutes = require("./routes/auth");
-
-
 const app = express();
 
-
-
-console.log(" Starting Anupam's Express application...");
+console.log("🚀 Starting Express application...");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,6 +22,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
@@ -56,7 +53,6 @@ function ensureLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
-
 // Routes
 app.use("/", authRoutes);
 
@@ -75,17 +71,15 @@ app.get("/create-message", ensureLoggedIn, (req, res) => {
 });
 
 app.get("/dashboard", ensureLoggedIn, (req, res) => {
-  // Redirect to the messages route which handles the dashboard rendering
   res.redirect("/messages");
 });
 
 app.get("/", (req, res) => {
-  res.render("index",{ user: req.user });
+  res.render("index", { user: req.user });
 });
 app.get("/register", (req, res) => {
   res.render("register", { user: req.user });
 });
-
 app.get("/login", (req, res) => {
   const successMessage =
     req.query.registered === "true"
@@ -93,7 +87,6 @@ app.get("/login", (req, res) => {
       : null;
   res.render("login", { successMessage, user: req.user });
 });
-
 app.listen(3000, () => {
   console.log("Server Started on Port 3000");
 });

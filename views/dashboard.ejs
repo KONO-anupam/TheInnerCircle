@@ -1,201 +1,75 @@
-<%- include('partials/header', { title: 'Dashboard - Members Only' }) %>
+<%- include('partials/header', { title: 'Dashboard' }) %>
 
-<div class="w-full">
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </h2>
-      <p class="text-gray-500 mt-1">
-        Welcome back, <%= user.first_name %>! Here are the latest messages from our community.
-      </p>
-    </div>
-    <div>
-      <% if (user.is_member) { %>
-        <a href="/create-message" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md inline-flex items-center gap-2">
-          <i class="fas fa-pen-fancy"></i> Create Message
-        </a>
-      <% } else { %>
-        <a href="/become-member" class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-md inline-flex items-center gap-2">
-          <i class="fas fa-star"></i> Become Member
-        </a>
-      <% } %>
-    </div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-4">
+  <div>
+    <h1 class="text-2xl font-bold mb-1">Community Feed</h1>
+    <p class="text-gray-500">Latest posts from our members.</p>
+  </div>
+  <% if (user.is_member) { %>
+    <a href="/create-message" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition">
+      <i class="fas fa-plus-circle"></i> New Post
+    </a>
+  <% } else { %>
+    <a href="/become-member" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition">
+      <i class="fas fa-star"></i> Become a Member
+    </a>
+  <% } %>
+</div>
+
+<% if (!user.is_member) { %>
+<div class="flex items-start bg-blue-100 text-blue-800 border border-blue-300 rounded-lg p-4 mb-6">
+  <i class="fas fa-info-circle fa-2x mr-4"></i>
+  <div>
+    <h5 class="font-bold text-lg mb-1">Limited Access</h5>
+    <p>
+      As a non-member, you can only see that messages exist.
+      <a href="/become-member" class="text-blue-700 underline">Become a member</a> to view
+      posts, authors, and dates.
+    </p>
+  </div>
+</div>
+<% } %>
+
+<div class="flex justify-center">
+  <div class="w-full max-w-3xl">
+    <% if (typeof messages !== 'undefined' && messages.length > 0) { %>
+      <% messages.forEach(message => { %>
+        <div class="bg-white shadow-md rounded-md mb-6 transition-all transform hover:-translate-y-1 hover:shadow-lg p-6">
+          <h3 class="text-lg font-semibold mb-2"><%= message.title %></h3>
+          <% if (user.is_member) { %>
+            <p class="text-gray-800 mb-4"><%= message.text %></p>
+            <div class="border-t pt-3 text-sm text-gray-500">
+              <p>
+                By <%= message.user.first_name %> <%= message.user.last_name %>
+              </p>
+              <p><%= new Date(message.timestamp).toLocaleString() %></p>
+            </div>
+          <% } else { %>
+            <p class="italic text-gray-400">[Content hidden for non-members]</p>
+          <% } %>
+
+          <% if (user && user.is_admin) { %>
+            <form action="/delete-message/<%= message._id %>" method="post" class="mt-4">
+              <button type="submit" class="px-3 py-1 text-sm border border-red-600 text-red-600 hover:bg-red-600 hover:text-white rounded-md transition">
+                <i class="fas fa-trash-alt mr-1"></i> Delete
+              </button>
+            </form>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="flex flex-col items-center justify-center min-h-[300px] border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 text-center p-6">
+        <i class="fas fa-comments text-5xl text-gray-300 mb-4"></i>
+        <h4 class="text-gray-500 text-lg font-semibold mb-1">No Messages Yet</h4>
+        <p class="text-gray-400 mb-3">Be the first to post and start a conversation!</p>
+        <% if (user.is_member) { %>
+          <a href="/create-message" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+            Create a Post
+          </a>
+        <% } %>
+      </div>
+    <% } %>
   </div>
 </div>
 
-
-<% if (typeof error !== 'undefined' && error) { %>
-  <div class="w-full mb-4">
-    <div class="bg-red-100 text-red-700 px-4 py-3 rounded flex items-center gap-2">
-      <i class="fas fa-exclamation-triangle"></i>
-      <span><%= error %></span>
-    </div>
-  </div>
-<% } %>
-
-<% if (user.is_member) { %>
-  <div class="w-full mb-4">
-    <div class="bg-green-100 text-green-800 px-4 py-3 rounded flex items-start gap-3">
-      <i class="fas fa-star fa-2x text-yellow-500"></i>
-      <div>
-        <h5 class="font-semibold flex items-center gap-2">
-          <i class="fas fa-crown text-yellow-500"></i> Member Access Active
-        </h5>
-        <p>You have full access to all messages with complete details and author information.</p>
-      </div>
-    </div>
-  </div>
-<% } else { %>
-  <div class="w-full mb-4">
-    <div class="bg-blue-100 text-blue-800 px-4 py-3 rounded flex items-start gap-3">
-      <i class="fas fa-info-circle fa-2x text-blue-500"></i>
-      <div>
-        <h5 class="font-semibold">Limited Access</h5>
-        <p>
-          Messages are displayed anonymously.
-          <a href="/become-member" class="underline text-blue-600 hover:text-blue-700">Become a member</a>
-          to see full details and author information.
-        </p>
-      </div>
-    </div>
-  </div>
-<% } %>
-
-<div class="w-full">
-  <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-      <h5 class="text-lg font-semibold flex items-center gap-2">
-        <i class="fas fa-comments"></i> Community Messages
-        <span class="bg-white text-blue-600 rounded-full px-2 py-0.5 text-sm">
-          <%= typeof messages !== 'undefined' ? messages.length : 0 %> messages
-        </span>
-      </h5>
-    </div>
-
-
-    <% messages.forEach((message, index) => { %>
-  <div class="border-b last:border-b-0">
-    <div class="p-6">
-      <div class="flex justify-between items-start mb-4">
-        <div class="flex-1">
-          <h5 class="text-lg font-semibold mb-2">
-            <% if (user.is_member) { %>
-              <%= message.title %>
-            <% } else { %>
-              <span class="text-gray-400 italic">[Message Title Hidden]</span>
-            <% } %>
-          </h5>
-
-          <!-- Author Info -->
-          <div class="flex items-center mb-3">
-            <% if (user.is_member) { %>
-              <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                <i class="fas fa-user text-sm"></i>
-              </div>
-              <div>
-                <span class="font-bold"><%= message.first_name %> <%= message.last_name %></span>
-                <small class="text-gray-500 ml-2">@<%= message.username %></small>
-                <% if (message.is_member) { %>
-                  <span class="bg-yellow-300 text-black text-xs font-medium px-2 py-0.5 rounded ml-1">
-                    <i class="fas fa-star"></i> Member
-                  </span>
-                <% } %>
-              </div>
-            <% } else { %>
-              <div class="bg-gray-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                <i class="fas fa-user-secret text-sm"></i>
-              </div>
-              <span class="text-gray-400 italic">Anonymous User</span>
-            <% } %>
-          </div>
-        </div>
-
-        <!-- Timestamp -->
-        <div class="text-right">
-          <small class="text-gray-500">
-            <i class="fas fa-clock mr-1"></i>
-            <% if (user.is_member && message.created_at) { %>
-              <%= new Date(message.created_at).toLocaleDateString() %>
-            <% } else { %>
-              Recently
-            <% } %>
-          </small>
-        </div>
-      </div>
-
-      <!-- Message Content -->
-      <div>
-        <% if (user.is_member) { %>
-          <p><%= message.content %></p>
-        <% } else { %>
-          <p class="text-gray-400 italic">
-            [Message content is only visible to members.
-            <a href="/become-member" class="underline text-blue-600">Become a member</a>
-            to read full messages.]
-          </p>
-        <% } %>
-      </div>
-
-      <!-- Actions -->
-      <% if (user.is_member) { %>
-        <div class="mt-4 pt-4 border-t flex justify-between items-center">
-          <div class="flex gap-2">
-            <button class="text-sm px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">
-              <i class="fas fa-thumbs-up mr-1"></i> Like
-            </button>
-            <button class="text-sm px-3 py-1 border border-gray-400 text-gray-700 rounded hover:bg-gray-100">
-              <i class="fas fa-reply mr-1"></i> Reply
-            </button>
-          </div>
-          <small class="text-gray-400">Message #<%= message.id %></small>
-        </div>
-      <% } %>
-    </div>
-  </div>
-<% }); %>
-
-
-<% } else { %>
-  <div class="text-center py-10">
-    <i class="fas fa-comments fa-3x text-gray-400 mb-4"></i>
-    <h5 class="text-gray-600 text-xl font-semibold">No messages yet</h5>
-    <p class="text-gray-500 mb-4">Be the first to start a conversation!</p>
-    <% if (user.is_member) { %>
-      <a href="/create-message" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        <i class="fas fa-pen-fancy mr-2"></i>Create First Message
-      </a>
-    <% } else { %>
-      <a href="/become-member" class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-500">
-        <i class="fas fa-star mr-2"></i>Become Member to Post
-      </a>
-    <% } %>
-  </div>
-<% } %>
-
-
-<% if (user.is_member && typeof messages !== 'undefined' && messages.length > 0) { %>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-    <div class="bg-white shadow rounded-lg p-6 text-center">
-      <i class="fas fa-comments text-blue-500 text-2xl mb-2"></i>
-      <h4 class="text-2xl font-bold"><%= messages.length %></h4>
-      <p class="text-gray-500">Total Messages</p>
-    </div>
-    <div class="bg-white shadow rounded-lg p-6 text-center">
-      <i class="fas fa-users text-green-500 text-2xl mb-2"></i>
-      <h4 class="text-2xl font-bold">
-        <%= [...new Set(messages.map(m => m.username))].length %>
-      </h4>
-      <p class="text-gray-500">Active Contributors</p>
-    </div>
-    <div class="bg-white shadow rounded-lg p-6 text-center">
-      <i class="fas fa-star text-yellow-500 text-2xl mb-2"></i>
-      <h4 class="text-2xl font-bold">
-        <%= messages.filter(m => m.is_member).length %>
-      </h4>
-      <p class="text-gray-500">Member Posts</p>
-    </div>
-  </div>
-<% } %>
-
-
+<%- include('partials/footer') %>

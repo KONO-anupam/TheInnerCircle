@@ -3,122 +3,86 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title || 'Members Only' %></title>
-
-    <!-- Font Awesome -->
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <title><%= title || 'The Inner Circle' %></title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
     />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#1a1a1a',
+              secondary: '#ff4081',
+              bgColor: '#f5f5f7',
+              textColor: '#333',
+              cardBg: '#ffffff'
+            },
+            fontFamily: {
+              sans: ['Poppins', 'sans-serif']
+            },
+          },
+        },
+      };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-      .text-pink {
-        color: #e91e63;
-      }
-    </style>
   </head>
-  <body class="bg-gray-100 min-h-screen">
-    <nav class="bg-gray-900 text-white">
+  <body class="bg-bgColor text-textColor font-sans min-h-screen flex flex-col">
+    <nav class="bg-primary shadow-md">
       <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
-        <a class="text-xl font-bold flex items-center gap-2" href="/">
-          <i class="fas fa-users"></i> Members Only
+        <a href="/" class="text-secondary font-bold text-2xl">
+          <i class="fas fa-user-secret"></i> The Inner Circle
         </a>
         <button
-          class="lg:hidden text-white"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
+          class="text-white block lg:hidden"
+          id="navbar-toggle"
         >
           <i class="fas fa-bars"></i>
         </button>
-
-        <div class="w-full lg:flex lg:items-center lg:justify-between hidden lg:block mt-4 lg:mt-0" id="navbarNav">
-          <ul class="flex flex-col lg:flex-row gap-4 lg:gap-6">
-            <li>
-              <a href="/" class="hover:text-gray-300 flex items-center gap-2">
-                <i class="fas fa-home"></i> Home
-              </a>
-            </li>
+        <div class="w-full lg:flex lg:items-center lg:w-auto hidden" id="navbarNav">
+          <ul class="lg:flex lg:space-x-6 lg:ml-auto">
+            <li><a href="/" class="text-white hover:text-secondary flex items-center"><i class="fas fa-home mr-1"></i>Home</a></li>
             <% if (typeof user !== 'undefined' && user) { %>
-              <li>
-                <a href="/dashboard" class="hover:text-gray-300 flex items-center gap-2">
-                  <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-              </li>
+              <li><a href="/dashboard" class="text-white hover:text-secondary flex items-center"><i class="fas fa-tachometer-alt mr-1"></i>Dashboard</a></li>
               <% if (user.is_member) { %>
-                <li>
-                  <a href="/create-message" class="hover:text-gray-300 flex items-center gap-2">
-                    <i class="fas fa-pen-fancy"></i> Create Message
-                  </a>
-                </li>
-              <% } else { %>
-                <li>
-                  <a href="/become-member" class="hover:text-gray-300 flex items-center gap-2">
-                    <i class="fas fa-star"></i> Become Member
-                  </a>
-                </li>
+              <li><a href="/create-message" class="text-white hover:text-secondary flex items-center"><i class="fas fa-plus-circle mr-1"></i>New Post</a></li>
               <% } %>
-            <% } %>
-          </ul>
-
-          <!-- Right side nav -->
-          <ul class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6 mt-4 lg:mt-0">
-            <% if (typeof user !== 'undefined' && user) { %>
-              <!-- Logged in dropdown -->
               <li class="relative group">
-                <button class="flex items-center gap-2 hover:text-gray-300">
-                  <i class="fas fa-user-circle"></i>
-                  <%= user.first_name %> <%= user.last_name %>
+                <button class="text-white hover:text-secondary flex items-center">
+                  <i class="fas fa-user-circle mr-1"></i>
+                  <%= user.first_name %>
                   <% if (user.is_member) { %>
-                    <span class="bg-yellow-400 text-black text-xs px-1 rounded">
-                      <i class="fas fa-star"></i>
-                    </span>
+                    <span class="bg-yellow-400 text-black text-xs rounded-full px-1 ml-1"><i class="fas fa-star"></i></span>
                   <% } %>
                   <% if (user.is_admin) { %>
-                    <span class="bg-red-600 text-white text-xs px-1 rounded">
-                      <i class="fas fa-crown"></i>
-                    </span>
+                    <span class="bg-red-600 text-white text-xs rounded-full px-1 ml-1"><i class="fas fa-crown"></i></span>
                   <% } %>
                 </button>
-
-                <ul class="absolute hidden group-hover:block right-0 bg-white text-black shadow-md rounded w-56 mt-2 z-50">
-                  <li class="px-4 py-2 text-sm font-semibold border-b flex items-center gap-2">
-                    <i class="fas fa-info-circle text-blue-500"></i> Account Info
-                  </li>
-                  <li class="px-4 py-2 text-sm">
-                    <small class="text-gray-500 block">@<%= user.username %></small>
-                    <small class="text-gray-500 block"><%= user.email %></small>
-                  </li>
-                  <li><hr class="my-1" /></li>
+                <ul class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg hidden group-hover:block text-gray-700">
+                  <li class="px-4 py-2 border-b text-sm font-semibold">@<%= user.username %></li>
                   <% if (!user.is_member) { %>
-                    <li>
-                      <a href="/become-member" class="block px-4 py-2 text-sm hover:bg-gray-100">
-                        <i class="fas fa-star text-yellow-500 mr-2"></i> Become Member
-                      </a>
-                    </li>
+                    <li><a href="/become-member" class="block px-4 py-2 hover:bg-gray-100"><i class="fas fa-star text-yellow-500 mr-2"></i>Become a Member</a></li>
                   <% } %>
                   <li>
                     <form action="/logout" method="post">
-                      <button
-                        type="submit"
-                        class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                      >
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                      <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
                       </button>
                     </form>
                   </li>
                 </ul>
               </li>
             <% } else { %>
-              <!-- Not logged in -->
+              <li><a href="/login" class="text-white hover:text-secondary flex items-center"><i class="fas fa-sign-in-alt mr-1"></i>Login</a></li>
               <li>
-                <a href="/login" class="hover:text-gray-300 flex items-center gap-2">
-                  <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-              </li>
-              <li>
-                <a href="/register" class="hover:text-gray-300 flex items-center gap-2">
-                  <i class="fas fa-user-plus"></i> Register
+                <a href="/register" class="bg-secondary text-white px-3 py-1 rounded hover:bg-pink-600 text-sm">
+                  <i class="fas fa-user-plus mr-1"></i>Register
                 </a>
               </li>
             <% } %>
@@ -127,8 +91,28 @@
       </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-8">
-      <!-- Main content goes here -->
-    </main>
+    <div class="container mx-auto px-4 py-8 flex-grow">
+      <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+        <ul class="list-disc list-inside">
+          <% errors.forEach(error => { %>
+          <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+
+      <% if (typeof success_msg !== 'undefined' && success_msg) { %>
+      <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+        <%= success_msg %>
+      </div>
+      <% } %>
+
+      <% if (typeof error_msg !== 'undefined' && error_msg) { %>
+      <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+        <%= error_msg %>
+      </div>
+      <% } %>
+    </div>
   </body>
 </html>
