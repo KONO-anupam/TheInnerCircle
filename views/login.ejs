@@ -1,45 +1,53 @@
-<%- include('partials/header', { title: 'Login' }) %>
+<%- include('partials/header', { title: 'login' }) %>
 
-<div class="row justify-content-center">
-  <div class="col-md-6 col-lg-4">
-    <div class="card">
-      <div class="card-body p-4 p-md-5">
-        <div class="text-center mb-4">
-          <h2 class="fw-bold">Log In</h2>
-          <p class="text-muted">Access your Inner Circle account.</p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Log In</h2>
+        <p class="mt-2 text-sm text-gray-500">Access your Inner Circle account.</p>
+      </div>
+
+      <form action="/login" method="post" class="space-y-6">
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Username"
+            required
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
         </div>
-        <form action="/login" method="post">
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              placeholder="Username"
-              required
-            />
-            <label for="username">Username</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
-            <label for="password">Password</label>
-          </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-lg">Login</button>
-          </div>
-        </form>
-        <div class="text-center mt-4">
-          <p class="text-muted">
-            Don't have an account? <a href="/register">Register</a>
-          </p>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            required
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
         </div>
+
+        <div>
+          <button
+            type="submit"
+            class="w-full flex justify-center items-center px-4 py-3 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-6">
+        <p class="text-sm text-gray-500">
+          Don't have an account?
+          <a href="/register" class="text-indigo-600 hover:underline">Register</a>
+        </p>
       </div>
     </div>
   </div>

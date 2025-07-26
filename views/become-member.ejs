@@ -1,39 +1,49 @@
 <%- include('partials/header', { title: 'Become a Member' }) %>
 
-<div class="flex justify-center px-4 py-12">
-  <div class="w-full max-w-md">
-    <div class="bg-white shadow-md rounded-lg p-6 text-center">
-      <i class="fas fa-star fa-3x text-yellow-400 mb-4"></i>
-      <h2 class="text-2xl font-bold mb-2">Become a Member</h2>
-      <p class="text-gray-500 mb-6">
-        Enter the secret code to unlock full access to The Inner Circle.
-      </p>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Become a Full Member</h2>
+        <p class="mt-2 text-sm text-gray-500">
+          Unlock full access by entering the secret passcode.
+        </p>
+      </div>
 
-      <form action="/become-member" method="post" class="space-y-4">
-        <div class="relative">
+      <% if (user.is_member) { %>
+      <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-5 rounded-lg text-center">
+        <h4 class="text-lg font-semibold flex items-center justify-center gap-2">
+          <i class="fas fa-check-circle text-green-600"></i>You Are Already a Member!
+        </h4>
+        <p class="mt-2">You have full access to all community features.</p>
+        <hr class="my-4 border-green-300" />
+        <a href="/dashboard" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition">
+          <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
+        </a>
+      </div>
+      <% } else { %>
+      <form action="/become-member" method="post" class="space-y-6">
+        <div>
+          <label for="secret_code" class="block text-sm font-medium text-gray-700">Secret Passcode</label>
           <input
             type="password"
-            id="secret_code"
             name="secret_code"
+            id="secret_code"
             required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Secret Passcode"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          <label
-            for="secret_code"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-          >
-            Secret Code
-          </label>
         </div>
-
-        <button
-          type="submit"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold py-3 rounded-md transition"
-        >
-          Unlock Membership
-        </button>
+        <div>
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition"
+          >
+            <i class="fas fa-lock-open"></i>Unlock Membership
+          </button>
+        </div>
       </form>
+      <% } %>
     </div>
   </div>
 </div>

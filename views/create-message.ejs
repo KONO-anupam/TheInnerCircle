@@ -1,57 +1,46 @@
-<%- include('partials/header', { title: 'Create Message' }) %>
+<%- include('partials/header', { title: 'Create a New Post' }) %>
 
-<div class="flex justify-center px-4 py-12">
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="w-full max-w-2xl">
-    <div class="bg-white shadow-md rounded-lg p-6 md:p-10">
+    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8">
       <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold mb-1">Create a New Post</h2>
-        <p class="text-gray-500">Share your thoughts with the community.</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Create a New Post</h2>
+        <p class="mt-2 text-sm text-gray-500">Share your thoughts with the community.</p>
       </div>
 
       <form action="/create-message" method="post" class="space-y-6">
-        <!-- Title Field -->
-        <div class="relative">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
           <input
             type="text"
             id="title"
             name="title"
+            placeholder="Post Title"
             required
-            placeholder=" "
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          <label
-            for="title"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-          >
-            Title
-          </label>
         </div>
 
-        <!-- Textarea Field -->
-        <div class="relative">
+        <div>
+          <label for="text" class="block text-sm font-medium text-gray-700">Message</label>
           <textarea
             id="text"
             name="text"
+            placeholder="What's on your mind?"
             required
-            placeholder=" "
             rows="6"
-            class="peer w-full border border-gray-300 rounded-md px-4 pt-4 pb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y min-h-[150px]"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
           ></textarea>
-          <label
-            for="text"
-            class="absolute left-4 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-          >
-            Message
-          </label>
         </div>
 
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold py-3 rounded-md transition"
-        >
-          Submit Post
-        </button>
+        <div>
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition"
+          >
+            Submit Post
+          </button>
+        </div>
       </form>
     </div>
   </div>
