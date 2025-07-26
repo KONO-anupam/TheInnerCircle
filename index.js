@@ -13,7 +13,7 @@ let indexRouter = require("./routes/index");
 let authRouter = require("./routes/auth");
 app.locals.pluralize = require("pluralize");
 
-console.log("🚀 Starting Express application...");
+console.log(" Starting Anupam's Express application...");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
