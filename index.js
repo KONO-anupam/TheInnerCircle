@@ -39,7 +39,7 @@ app.use(
     rolling: true, // Reset expiry on activity
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      secure: process.env.NODE_ENV === 'production', // Set to true in production with HTTPS
+      secure: false, // Set to true in production with HTTPS
       httpOnly: true, // Prevent XSS attacks
       sameSite: "lax", // CSRF protection
     },
@@ -56,56 +56,15 @@ function ensureLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
-// Make user available in all templates
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  res.locals.error = req.flash("error");
-  res.locals.successMessage = req.flash("successMessage");
-  next();
-});
-
 // Routes
 app.use("/", authRoutes);
-
-app.get("/", (req, res) => {
-  res.render("index", { 
-    title: "Home"
-  });
-});
-
-app.get("/register", (req, res) => {
-  res.render("register", {
-    title: "Register",
-    error: req.flash("error") || [],
-    formData: req.flash("formData")[0] || {},
-  });
-});
-
-app.get("/login", (req, res) => {
-  const successMessage = req.flash("success");
-  res.render("login", {
-    title: "Login",
-    successMessage,
-    error: req.flash("error"),
-  });
-});
 
 app.get("/become-member", ensureLoggedIn, (req, res) => {
   res.render("become-member", {
     title: "Become a Member",
+    user: req.user,
     error: req.flash("error"),
     successMessage: req.flash("successMessage"),
-  });
-});
-
-app.get("/create-message", ensureLoggedIn, (req, res) => {
-  if (!req.user.is_member) {
-    req.flash("error", "You need to become a member first to create messages.");
-    return res.redirect("/become-member");
-  }
-  res.render("create-message", {
-    title: "Create Message",
-    error: null,
   });
 });
 
@@ -116,19 +75,11 @@ app.post("/create-message", ensureLoggedIn, async (req, res) => {
 
   const { title, text } = req.body;
 
-  // Basic validation
-  if (!title || !text) {
-    return res.render("create-message", {
-      title: "Create Message",
-      error: "Both title and message content are required.",
-    });
-  }
-
   try {
     await prisma.message.create({
       data: {
-        title: title.trim(),
-        content: text.trim(),
+        title,
+        content: text,
         author_id: req.user.id,
       },
     });
@@ -138,14 +89,31 @@ app.post("/create-message", ensureLoggedIn, async (req, res) => {
     console.error("Error creating message:", error);
     res.render("create-message", {
       title: "Create Message",
+      user: req.user,
       error: "Failed to create message. Please try again.",
     });
   }
 });
 
+app.get("/create-message", ensureLoggedIn, (req, res) => {
+  if (!req.user.is_member) {
+    return res.render("become-member", {
+      title: "Become a Member",
+      error: "You need to become a member first to create messages.",
+      user: req.user,
+    });
+  }
+  res.render("create-message", {
+    title: "Create Message",
+    user: req.user,
+    error: null,
+  });
+});
+
 app.get("/get-the-code", (req, res) => {
   res.render("get-the-code", {
     title: "Get the Code",
+    user: req.user,
     memberCode: process.env.MEMBER_SECRET_CODE,
   });
 });
@@ -155,8 +123,28 @@ app.post("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("successMessage", "You have been logged out successfully.");
     res.redirect("/");
+  });
+});
+
+app.get("/", (req, res) => {
+  res.render("index", { title: "Home", user: req.user });
+});
+app.get("/register", (req, res) => {
+  res.render("register", {
+    title: "Register",
+    user: req.user,
+    error: req.flash("error") || [],
+    formData: req.flash("formData")[0],
+  });
+});
+app.get("/login", (req, res) => {
+  const successMessage = req.flash("success");
+  res.render("login", {
+    title: "Login",
+    successMessage,
+    user: req.user,
+    error: req.flash("error"),
   });
 });
 
@@ -165,26 +153,7 @@ app.get("/self-ping", (req, res) => {
   res.status(200).send("Pinged self.");
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).render('error', {
-    title: 'Error',
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'production' ? {} : err
-  });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render('error', {
-    title: 'Page Not Found',
-    message: 'The page you are looking for does not exist.',
-    error: {}
-  });
-});
-
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
 
 app.listen(PORT, () => {
@@ -202,6 +171,6 @@ app.listen(PORT, () => {
           }
         })
         .catch((err) => console.error("Error during self-ping:", err));
-    }, 13 * 60 * 1000); // 13 minutes
+    }, 1 * 60 * 1000); // 13 minutes
   }
 });
