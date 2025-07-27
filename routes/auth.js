@@ -4,49 +4,66 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const prisma = require("../db.js");
 const passport = require("passport");
-const LocalPassport = require("passport-local");
+const LocalStrategy = require("passport-local").Strategy;
 
 function ensureLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect("/login");
 }
 
-passport.serializeUser((user, done) => done(null, user.id));
+// Passport configuration
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
 passport.deserializeUser(async (id, done) => {
   try {
-    // Use Prisma to find the user by ID
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id, 10) },
     });
     done(null, user);
   } catch (error) {
-    done(error);
+    console.error("Deserialize user error:", error);
+    done(error, null);
   }
 });
-passport.use(
-  new LocalPassport.Strategy(async (username, password, done) => {
-    try {
-      // Use Prisma to find a user by username or email
-      const user = await prisma.user.findFirst({
-        where: {
-          OR: [{ username: username }, { email: username }],
-        },
-      });
 
-      if (!user) {
-        return done(null, false, { message: "User not found" });
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: 'username',
+      passwordField: 'password'
+    },
+    async (username, password, done) => {
+      try {
+        const user = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { username: username },
+              { email: username }
+            ],
+          },
+        });
+
+        if (!user) {
+          return done(null, false, { message: "User not found" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return done(null, false, { message: "Invalid password" });
+        }
+
+        return done(null, user);
+      } catch (error) {
+        console.error("Login error:", error);
+        return done(error);
       }
-      const matched = await bcrypt.compare(password, user.password);
-      if (!matched) {
-        return done(null, false, { message: "Password does not match" });
-      }
-      done(null, user);
-    } catch (error) {
-      done(error);
     }
-  })
+  )
 );
 
+// Login route
 router.post(
   "/login",
   [
@@ -55,29 +72,45 @@ router.post(
       .isLength({ min: 1 })
       .withMessage("Username or email is required")
       .escape(),
-
-    body("password").isLength({ min: 1 }).withMessage("Password is required"),
+    body("password")
+      .isLength({ min: 1 })
+      .withMessage("Password is required"),
   ],
   (req, res, next) => {
-    // Check for validation errors first
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorMessages = errors.array().map((error) => error.msg);
-      return res.render("login", {
-        error: errorMessages.join(". "),
-        formData: req.body,
-      });
+      req.flash("error", errorMessages.join(". "));
+      return res.redirect("/login");
     }
 
-    // Proceed with passport authentication if validation passes
-    passport.authenticate("local", {
-      successRedirect: "/messages",
-      failureRedirect: "/login",
-      failureFlash: true,
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        console.error("Authentication error:", err);
+        req.flash("error", "An error occurred during login.");
+        return res.redirect("/login");
+      }
+      
+      if (!user) {
+        req.flash("error", info.message || "Login failed.");
+        return res.redirect("/login");
+      }
+
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error("Login error:", err);
+          req.flash("error", "An error occurred during login.");
+          return res.redirect("/login");
+        }
+        
+        req.flash("successMessage", "Login successful!");
+        return res.redirect("/messages");
+      });
     })(req, res, next);
   }
 );
 
+// Register route
 router.post(
   "/register",
   [
@@ -100,9 +133,7 @@ router.post(
       .isLength({ min: 3, max: 30 })
       .withMessage("Username must be between 3 and 30 characters")
       .matches(/^[a-zA-Z0-9_]+$/)
-      .withMessage(
-        "Username can only contain letters, numbers, and underscores"
-      ),
+      .withMessage("Username can only contain letters, numbers, and underscores"),
 
     body("email")
       .trim()
@@ -114,9 +145,7 @@ router.post(
       .isLength({ min: 6, max: 100 })
       .withMessage("Password must be at least 6 characters long")
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-      .withMessage(
-        "Password must contain at least one lowercase letter, one uppercase letter, and one number"
-      ),
+      .withMessage("Password must contain at least one lowercase letter, one uppercase letter, and one number"),
 
     body("confirm_password").custom((value, { req }) => {
       if (value !== req.body.password) {
@@ -127,7 +156,6 @@ router.post(
   ],
   async (req, res) => {
     try {
-      // Check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         req.flash("error", errors.array()[0].msg);
@@ -135,59 +163,54 @@ router.post(
         return res.redirect("/register");
       }
 
-      const { first_name, last_name, username, email, password, admin_code } =
-        req.body;
+      const { first_name, last_name, username, email, password, admin_code } = req.body;
 
-      const isAdmin = admin_code === process.env.ADMIN_SECRET_CODE;
-      const isMember = isAdmin; // Admins are always members
-
-      // Use Prisma to check if user exists
+      // Check if user already exists
       const existingUser = await prisma.user.findFirst({
-        where: { OR: [{ username: username }, { email: email }] },
+        where: { 
+          OR: [
+            { username: username.trim() }, 
+            { email: email.trim() }
+          ] 
+        },
       });
 
       if (existingUser) {
-        req.flash(
-          "error",
-          "Username or email already exists. Please choose different ones."
-        );
+        req.flash("error", "Username or email already exists. Please choose different ones.");
         req.flash("formData", req.body);
         return res.redirect("/register");
       }
 
+      const isAdmin = admin_code === process.env.ADMIN_SECRET_CODE;
+      const isMember = isAdmin; // Admins are automatically members
+
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      // Use Prisma to create a new user
       await prisma.user.create({
         data: {
-          first_name,
-          last_name,
-          username,
-          email,
+          first_name: first_name.trim(),
+          last_name: last_name.trim(),
+          username: username.trim(),
+          email: email.trim(),
           password: hashedPassword,
           is_admin: isAdmin,
           is_member: isMember,
         },
       });
 
-      req.flash(
-        "success",
-        "Registration successful! Please log in with your credentials."
-      );
+      req.flash("success", "Registration successful! Please log in with your credentials.");
       res.redirect("/login");
     } catch (error) {
       console.error("Registration error:", error);
-      req.flash(
-        "error",
-        "An error occurred during registration. Please try again."
-      );
+      req.flash("error", "An error occurred during registration. Please try again.");
       req.flash("formData", req.body);
       return res.redirect("/register");
     }
   }
 );
 
+// Become member route
 router.post(
   "/become-member",
   ensureLoggedIn,
@@ -200,46 +223,39 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render("become-member", {
-        error: errors.array()[0].msg,
-        user: req.user,
-      });
+      req.flash("error", errors.array()[0].msg);
+      return res.redirect("/become-member");
     }
 
     try {
       const { secret_code } = req.body;
 
       if (secret_code !== process.env.MEMBER_SECRET_CODE) {
-        return res.render("become-member", {
-          error: "Incorrect passcode. Please try again.",
-          user: req.user,
-        });
+        req.flash("error", "Incorrect passcode. Please try again.");
+        return res.redirect("/become-member");
       }
 
-      // Use Prisma to update the user's membership status
       await prisma.user.update({
         where: { id: req.user.id },
         data: { is_member: true },
       });
 
-      req.flash(
-        "successMessage",
-        "Congratulations! You are now a full member."
-      );
+      // Update the user in the current session
+      req.user.is_member = true;
+
+      req.flash("successMessage", "Congratulations! You are now a full member.");
       res.redirect("/messages");
     } catch (error) {
       console.error("Membership update error:", error);
-      res.render("become-member", {
-        error: "An error occurred while updating your membership.",
-        user: req.user,
-      });
+      req.flash("error", "An error occurred while updating your membership.");
+      res.redirect("/become-member");
     }
   }
 );
 
+// Messages route
 router.get("/messages", ensureLoggedIn, async (req, res) => {
   try {
-    // Use Prisma to get all messages and include author details
     const messagesFromDb = await prisma.message.findMany({
       include: {
         author: {
@@ -264,27 +280,40 @@ router.get("/messages", ensureLoggedIn, async (req, res) => {
     }));
 
     return res.render("dashboard", {
+      title: "Messages",
       messages: messages,
-      user: req.user,
       successMessage: req.flash("successMessage"),
+      error: req.flash("error"),
     });
   } catch (error) {
     console.error("Error fetching messages:", error);
     return res.render("dashboard", {
+      title: "Messages",
       error: "An error occurred while fetching messages. Please try again.",
       messages: [],
-      user: req.user,
+      successMessage: null,
     });
   }
 });
+
+// Delete message route
 router.post("/delete-message/:id", ensureLoggedIn, async (req, res) => {
   try {
     if (!req.user.is_admin) {
       return res.status(403).send("You are not authorized to delete messages.");
     }
+
     const messageId = parseInt(req.params.id, 10);
-    // Use Prisma to delete the message
-    await prisma.message.delete({ where: { id: messageId } });
+    
+    if (isNaN(messageId)) {
+      req.flash("error", "Invalid message ID.");
+      return res.redirect("/messages");
+    }
+
+    await prisma.message.delete({ 
+      where: { id: messageId } 
+    });
+    
     req.flash("successMessage", "Message deleted successfully.");
     res.redirect("/messages");
   } catch (error) {
