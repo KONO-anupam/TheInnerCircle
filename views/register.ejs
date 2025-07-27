@@ -13,12 +13,36 @@
           <p class="text-gray-600">Create your account and start connecting</p>
         </div>
 
-        <!-- Error Message -->
-        <% if (typeof error !== 'undefined' && error) { %>
+        <!-- Error Message - Fixed condition -->
+        <% const errorMessages = typeof error !== 'undefined' && error ? [error] : (typeof messages !== 'undefined' ? messages.error : []); %>
+        <% if (errorMessages && errorMessages.length > 0) { %>
         <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
           <div class="flex items-center">
             <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
-            <span class="text-red-700 font-medium"><%= error %></span>
+            <span class="text-red-700 font-medium">
+              <% if (Array.isArray(errorMessages)) { %>
+                <%= errorMessages[0] %>
+              <% } else { %>
+                <%= errorMessages %>
+              <% } %>
+            </span>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Success Message -->
+        <% const successMessages = typeof success !== 'undefined' && success ? [success] : (typeof messages !== 'undefined' ? messages.success : []); %>
+        <% if (successMessages && successMessages.length > 0) { %>
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-lg">
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+            <span class="text-green-700 font-medium">
+              <% if (Array.isArray(successMessages)) { %>
+                <%= successMessages[0] %>
+              <% } else { %>
+                <%= successMessages %>
+              <% } %>
+            </span>
           </div>
         </div>
         <% } %>
@@ -39,7 +63,7 @@
                   type="text"
                   id="first_name"
                   name="first_name"
-                  value="<%= typeof formData !== 'undefined' && formData.firstName ? formData.firstName : '' %>"
+                  value="<%= typeof formData !== 'undefined' && formData && formData.first_name ? formData.first_name : '' %>"
                   placeholder="John"
                   required
                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
@@ -59,7 +83,7 @@
                   type="text"
                   id="last_name"
                   name="last_name"
-                  value="<%= typeof formData !== 'undefined' && formData.lastName ? formData.lastName : '' %>"
+                  value="<%= typeof formData !== 'undefined' && formData && formData.last_name ? formData.last_name : '' %>"
                   placeholder="Doe"
                   required
                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
@@ -81,7 +105,7 @@
                 type="text"
                 id="username"
                 name="username"
-                value="<%= typeof formData !== 'undefined' && formData.username ? formData.username : '' %>"
+                value="<%= typeof formData !== 'undefined' && formData && formData.username ? formData.username : '' %>"
                 placeholder="johndoe"
                 required
                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
@@ -102,7 +126,7 @@
                 type="email"
                 id="email"
                 name="email"
-                value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+                value="<%= typeof formData !== 'undefined' && formData && formData.email ? formData.email : '' %>"
                 placeholder="john@example.com"
                 required
                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors placeholder-gray-400 text-gray-900"
@@ -173,7 +197,7 @@
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
               <p class="text-sm text-blue-700 flex items-start space-x-2">
                 <i class="fas fa-info-circle mt-0.5 text-blue-500"></i>
-                <span>If you have an admin code, enter it here to register as an administrator with special privileges.</span>
+                <span>HINT: the code is the name of the site( all small ).</span>
               </p>
             </div>
           </div>
